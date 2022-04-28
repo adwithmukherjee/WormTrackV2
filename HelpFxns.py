@@ -1,0 +1,182 @@
+import io
+import glob
+import os
+import numpy as np
+import matplotlib.pyplot as plt
+
+def dataset(file_list, size=(400,512), flattened=False): #,size=(300,180)
+	data = []
+	for i, file in enumerate(file_list):
+		image = io.imread(file)
+		#image = transform.resize(image, size, mode='constant')
+		if flattened:
+			image = image.flatten()
+
+		data.append(image)
+
+	labels = [1 if f.split("/")[-1][0] == 'W' else 0 for f in file_list]
+
+
+	return np.array(data), np.array(labels)
+ 
+def ImgArray(file_list):
+	outputArray=[]
+	for i, file in enumerate(file_list):
+		image = io.imread(file)
+		outputArray.append(image)
+	return np.array(outputArray)
+ 
+ 
+def folderToImgArray(ImgPath):
+	imlist = glob.glob(os.path.join(ImgPath, '*.jpg'))
+	imlist.sort()
+	output= ImgArray(imlist)
+	return output
+
+
+## This block gets the list of x,y positions for each frame
+def getPosList(imgArray, stepSize='1'):
+  stepSize=5
+  #poslist= np.zeros((listlen-1, 2)) #x,y
+  poslist= np.empty((0,2), int)
+
+
+  for i in range(0,imgArray.shape[0]-1,stepSize):
+    img1=imgArray[i,:,:,:]
+    img2=imgArray[i+1,:,:,:]
+
+    #frame_compare
+    pos=frame_compare(img1,img2)
+    #print(pos)
+    
+    poslist= np.append(poslist,np.array([pos]),axis=0)
+    #All i want to do is add new paired x and y values to a new row... how is this
+    #so much to ask
+
+
+
+  return poslist
+
+#poslist= getPosList(data,5)
+
+def pullSub(inImg, pos, outputSize):
+  if outputSize[0]>inImg.shape[0] or outputSize[1]>inImg.shape[1]:
+    return "output bigger than image"
+  xmin=int(pos[0]-(outputSize[0]/2))
+  xmax=int(pos[0]+(outputSize[0]/2))
+  ymin=int(pos[1]-(outputSize[1]/2))
+  ymax=int(pos[1]+(outputSize[1]/2))
+  if xmin<0:
+    xmin=0
+  if xmax>(inImg.shape[1]):
+    xmax=(inImg.shape[1]-1)
+  if ymin<0:
+    ymin=0
+  if ymax>(inImg.shape[0]):
+    ymax=(inImg.shape[0]-1)
+
+  subImg=inImg[ymin:ymax, xmin:xmax]
+
+  return subImg
+
+def frame_compare(img1,img2,showImg=False):
+  #plt.imshow(img1)
+  #plt.imshow(img2)
+  #sum=img2-img1
+  sum= np.zeros(img2.shape)
+
+  rowLen=sum.shape[0]
+  colLen=sum.shape[1]
+
+  for pixelx in range(0,colLen):
+    for pixely in range(0,rowLen): #here
+      for pixelrgb in range(0,3):
+        if img2[pixely,pixelx,pixelrgb] >= img1[pixely,pixelx,pixelrgb]:
+          sum[pixely,pixelx,pixelrgb]= img2[pixely,pixelx,pixelrgb]-img1[pixely,pixelx,pixelrgb]
+        else:
+          sum[pixely,pixelx,pixelrgb]= img1[pixely,pixelx,pixelrgb]-img2[pixely,pixelx,pixelrgb]
+
+  ##print(img1[1:5,1:5])
+  #print(img2[1:5,1:5])
+  #print(sum[1:5,1:5])
+
+  #print(sum.shape[0])
+
+
+  dif_sens=40 #remove later
+  dif_sense= 10
+
+  motion_sensitivity=1.1 * 10
+
+  xavg=0
+  yavg=0
+
+
+  #for xx in range(0, sum.shape[1]):
+  # for yy in range(0, sum.shape[0]):
+  #   for zz in range(0, sum.shape[2]):
+  #     if sum[yy, xx, zz]<= dif_sens:
+  #        sum[yy,xx,zz]=0
+
+
+  #print(sum[0:10, 0:10])
+
+  difArray= np.zeros((sum.shape[0],sum.shape[1]))
+  #print(difArray.shape)
+  totPixelDif=0;
+  numNonZpixels=0
+  for pixelx in range(0,colLen):
+    for pixely in range(0,rowLen):
+      for pixelrgb in range(0,3):
+        chanPixelDif= sum[pixely,pixelx,pixelrgb]
+        totPixelDif = totPixelDif + chanPixelDif
+      if totPixelDif > dif_sense*3:
+        #print('hi')
+        difArray[pixely,pixelx]=totPixelDif
+      totPixelDif=0
+
+  #print(difArray)
+  difArray[:,:]= difArray[:,:]/3
+  #print(difArray)
+
+  #print(difArray)
+  weightTot=0
+  for pixelx in range(0,colLen):
+    for pixely in range(0,rowLen):
+      xavg=xavg + (difArray[pixely,pixelx]*pixelx)
+      yavg=yavg + (difArray[pixely,pixelx]*pixely)
+
+      weightTot= weightTot + difArray[pixely,pixelx]
+
+  if xavg>motion_sensitivity:
+    xavg=round(xavg/weightTot)
+    yavg=round(yavg/weightTot)
+    pos=[xavg, yavg]
+  else: #returns 00 if change below threshold
+    xavg=1
+    yavg=1
+    pos=[xavg, yavg]
+
+  size=3
+
+  #imshow
+  #print(difArray)
+  if showImg==True:
+    plt.subplot(2,2,1)
+    plt.imshow(sum)
+    plt.subplot(2,2,2)
+    plt.imshow(difArray)
+    plt.subplot(2,2,3)
+    difArrayMarked= difArray
+    #difArrayMarked[round(yavg-size):round(yavg+size), round(xavg-size):round(xavg+size)]= 1000000
+    plt.imshow(difArrayMarked)
+    print(xavg,yavg)
+    plt.scatter(xavg,yavg)
+    plt.subplot(2,2,4)
+    plt.imshow(img2)
+
+  plt.subplot(1,1,1)
+  plt.imshow(img2)
+  plt.scatter(xavg,yavg)
+
+  return pos
