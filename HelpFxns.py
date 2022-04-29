@@ -104,7 +104,7 @@ def frame_compare(img1,img2,showImg=False):
 
 
   dif_sens=40 #remove later
-  dif_sense= 10
+  dif_sense= 4 #was 10
 
   motion_sensitivity=1.1 * 10
 
@@ -152,7 +152,7 @@ def frame_compare(img1,img2,showImg=False):
     xavg=round(xavg/weightTot)
     yavg=round(yavg/weightTot)
     pos=[xavg, yavg]
-  else: #returns 00 if change below threshold
+  else: #returns 1,1 if change below threshold
     xavg=1
     yavg=1
     pos=[xavg, yavg]
@@ -175,8 +175,48 @@ def frame_compare(img1,img2,showImg=False):
     plt.subplot(2,2,4)
     plt.imshow(img2)
 
-  plt.subplot(1,1,1)
-  plt.imshow(img2)
-  plt.scatter(xavg,yavg)
+  #Bring Back later
+  # plt.subplot(1,1,1)
+  # plt.imshow(img2)
+  # plt.scatter(xavg,yavg)
 
   return pos
+
+def getImgList(ImgPath):
+	imlist = glob.glob(os.path.join(ImgPath, '*.jpg'))
+	imlist.sort()
+	return imlist
+
+
+def numToIndex(n,numDigits):
+  out=''
+  num=str(n)
+  for i in range(0,numDigits-len(num)):
+    out= out+'0'
+  out= out+ num
+  return out
+
+def sort_rename(path,):
+  #Takes in a path to a file of numbered, sequential images
+  #renames all the files in the directory with '_*' sequential number from 1:n added
+
+  ldseg = glob.glob(os.path.join(path, '*.jpg')) #pulls list of all files in folder
+  print('Dataset contains {} images'.format(len(ldseg))) #returns how many images in list
+  listlen= len(ldseg)
+
+  print(ldseg) #For some reason, glob pulls the files in a wrong order
+  ldseg.sort() #this sorts them alphabetically ASSUMES IMAGES ARE NUMBERED ALREADY/PROPERLY
+  print(ldseg)
+
+  i=1
+  for filename in ldseg:
+    dst =  filename.split('_')[0] + '_' + numToIndex(i,4) + '.jpg' #removes original index marker after a "_"
+    print(dst)
+    print(filename)
+    src =filename
+    print(src)
+    print(dst)
+    os.rename(src, dst)
+    i += 1
+
+#sort_rename(path)
