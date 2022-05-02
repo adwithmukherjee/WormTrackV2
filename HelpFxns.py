@@ -1,13 +1,16 @@
 import io
 import glob
 import os
+from pydoc import doc
 import numpy as np
 import matplotlib.pyplot as plt
+
+from keras import preprocessing
 
 def dataset(file_list, size=(400,512), flattened=False): #,size=(300,180)
 	data = []
 	for i, file in enumerate(file_list):
-		image = io.imread(file)
+		image = plt.imread(file)
 		#image = transform.resize(image, size, mode='constant')
 		if flattened:
 			image = image.flatten()
@@ -22,16 +25,37 @@ def dataset(file_list, size=(400,512), flattened=False): #,size=(300,180)
 def ImgArray(file_list):
 	outputArray=[]
 	for i, file in enumerate(file_list):
-		image = io.imread(file)
+		image = plt.imread(file)
 		outputArray.append(image)
 	return np.array(outputArray)
- 
- 
-def folderToImgArray(ImgPath):
+
+def ImgArrayResized(file_list,resizeDim):
+  outputArray=[]
+  for file in enumerate(file_list):
+    image= preprocessing.image.load_img(file, target_size= resizeDim)
+    outputArray.append(image)
+
+  return np.array(outputArray)
+
+def getImgList(path):
+  imlist = glob.glob(os.path.join(path, '*.jpg'))
+  imlist.sort()
+  return imlist 
+
+def folderToImgArray(ImgPath, resize = False, resizeDim=(0,0,3)):
 	imlist = glob.glob(os.path.join(ImgPath, '*.jpg'))
 	imlist.sort()
-	output= ImgArray(imlist)
-	return output
+  
+  if resize == True:
+    output= ImgArray(imlist,resizeDim)
+  else:
+    output= ImgArray(imlist)
+  return output
+
+def loadNetworkImage(path):
+  b= preprocessing.image.load_img(path, target_size=(64,64,3))
+  return b
+  
 
 
 ## This block gets the list of x,y positions for each frame

@@ -1,5 +1,5 @@
 
-
+from HelpFxns import *
 import glob, os 
 from skimage import io, transform
 import numpy as np 
@@ -57,28 +57,37 @@ def is_wormAdwith(categorical_dist):
     c = np.array(categorical_dist)
     np.max()
 
-#def 
 
-model1 : Model = load_model('D:/WormTrack/WormData/TrainedModels/Model1')
+#model1 : Model = load_model('D:/WormTrack/WormData/TrainedModels/Model1')
+# model1 : Model = load_model('TrainedModels/Model1')
 
 # makeSinglePrediction('C:/Users/jmara/OneDrive/Documents/GitHub/WormTrackV2/ClassifierInput/NimgLabeled_0351.jpg') 
 # makeSinglePrediction('C:/Users/jmara/OneDrive/Documents/GitHub/WormTrackV2/ClassifierInput/WimgLabeled_0005991.jpg')
 
 #makeSinglePrediction('C:/Users/jmara/OneDrive/Documents/GitHub/WormTrackV2/ClassifierInput/wormy.jpg'); 
 # a=plt.imread('C:/Users/jmara/OneDrive/Documents/GitHub/WormTrackV2/ClassifierInput/wormy.jpg')
-a=plt.imread('C:/Users/jmara/OneDrive/Documents/GitHub/WormTrackV2/ClassifierInput/wormy.jpg')
-b= preprocessing.image.load_img('C:/Users/jmara/OneDrive/Documents/GitHub/WormTrackV2/ClassifierInput/NimgLabeled_0006233.jpg', grayscale=False, target_size=(64,64,3))
-plt.imshow(b)
+
+
+# a=plt.imread('ClassifierInput/wormy.jpg')
+# b= preprocessing.image.load_img('ClassifierInput/wormy.jpg', target_size=(64,64,3))
+# plt.imshow(b)
+# plt.show()
+# print(makeSinglePrediction('ClassifierInput/wormy.jpg', model1))
+
+
+# imgArray1=[]
+# w=preprocessing.image.load_img('C:/Users/jmara/OneDrive/Documents/GitHub/WormTrackV2/ClassifierInput/wormy.jpg', grayscale=False, target_size=(64,64,3))
+# imgArray1.append(w)
+# #print(len(imgArray1))
+
+# q= preprocessing.image.load_img('C:/Users/jmara/OneDrive/Documents/GitHub/WormTrackV2/ClassifierInput/wormy2.jpg', grayscale=False, target_size=(64,64,3))
+# imgArray1= imgArray1.append(q)
+# #print(len(imgArray1))
+# p=np.asarray(imgArray1)
+# print(p.shape)
+
+array1= folderToImgArray('ClassifierInput/',True, (64,64,3))
+print(array1.shape)
+plt.imshow(array1[2])
 plt.show()
-print(makeSinglePrediction('C:/Users/jmara/OneDrive/Documents/GitHub/WormTrackV2/ClassifierInput/NimgLabeled_0006233.jpg', model1))
 
-imgArray1=[]
-w=preprocessing.image.load_img('C:/Users/jmara/OneDrive/Documents/GitHub/WormTrackV2/ClassifierInput/wormy.jpg', grayscale=False, target_size=(64,64,3))
-imgArray1.append(w)
-#print(len(imgArray1))
-
-q= preprocessing.image.load_img('C:/Users/jmara/OneDrive/Documents/GitHub/WormTrackV2/ClassifierInput/wormy2.jpg', grayscale=False, target_size=(64,64,3))
-imgArray1= imgArray1.append(q)
-#print(len(imgArray1))
-p=np.asarray(imgArray1)
-print(p.shape)
