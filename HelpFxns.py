@@ -175,7 +175,7 @@ def frame_compare(img1,img2,showImg=False):
     plt.subplot(2,2,4)
     plt.imshow(img2)
 
-  #Bring Back later
+  #Bring Back
   # plt.subplot(1,1,1)
   # plt.imshow(img2)
   # plt.scatter(xavg,yavg)
@@ -196,7 +196,7 @@ def numToIndex(n,numDigits):
   out= out+ num
   return out
 
-def sort_rename(path,):
+def sort_rename(path):
   #Takes in a path to a file of numbered, sequential images
   #renames all the files in the directory with '_*' sequential number from 1:n added
 
@@ -210,7 +210,7 @@ def sort_rename(path,):
 
   i=1
   for filename in ldseg:
-    dst =  filename.split('_')[0] + '_' + numToIndex(i,4) + '.jpg' #removes original index marker after a "_"
+    dst =  filename.split('_')[0] + '_' + numToIndex(i,5) + '.jpg' #removes original index marker after a "_"
     print(dst)
     print(filename)
     src =filename
@@ -219,4 +219,28 @@ def sort_rename(path,):
     os.rename(src, dst)
     i += 1
 
-#sort_rename(path)
+def tempRename(path):
+  ldseg = glob.glob(os.path.join(path, '*.jpg')) #pulls list of all files in folder
+  print('Dataset contains {} images'.format(len(ldseg))) #returns how many images in list
+  listlen= len(ldseg)
+
+  for filename in ldseg:
+    end= filename.split('_')[-1]
+    print(end)
+    if len(end)<9:
+      end= '000'+ end
+      dst= filename.split('_')[0] + end
+      os.rename(filename,dst)
+    print(end)
+    
+
+
+
+
+#sort_rename('D:/WormTrack/WormData/Labeled/')
+# a=getImgList('D:/WormTrack/WormData/Labeled_Backup/')
+# print(a[0:5])
+# print('hello there')
+# a.sort()
+# print(a[0:5])
+sort_rename('D:/WormTrack/WormData/LabeledBackup/')

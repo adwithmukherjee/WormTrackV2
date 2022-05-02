@@ -10,7 +10,9 @@ import random
 from HelpFxns import *
 import io
 
+
 def labeledSubImg(imgA,imgB,imgDim):
+  #returns sub image pulled from input images by frame_compare
   motionPos= frame_compare(imgA, imgB)
 
   motionImg= pullSub(imgB,motionPos,imgDim)
@@ -36,10 +38,9 @@ def labeledSubImg(imgA,imgB,imgDim):
   print(randx,randy)
   return motionImg, nonMotionImg
   
-def labeledSubImgWorm(imgA,imgB,imgDim):
-  motionPos= frame_compare(imgA, imgB)
-
-  motionImg= pullSub(imgB,motionPos,imgDim)
+def labeledSubImgWorm(imgB,imgDim):
+  
+  motionImg= pullSub(imgB,location,imgDim)
 
   plt.imshow(motionImg)
 
@@ -85,10 +86,8 @@ def makeGridClassifiedImgs(imgPath, outputPath, subLocation, subDims, imgDimensi
   #imgA= io.imread(imgList[1])
   #imgB= io.imread(imgList[2])
     imgA= plt.imread(imgList[i])
-    imgB= plt.imread(imgList[i+1])
-    imgA= pullSub(imgA,subLocation,subDims)
-    imgB= pullSub(imgA,subLocation,subDims)
-    subImg= labeledSubImgWorm(imgA,imgB,imgDimensions)
+    subImg= pullSub(imgA,subLocation,subDims)
+
     
     cv2.imwrite(outputPath+ '{0}imgLabeled_{1}.jpg'.format("W",(numToIndex(i+indexStart,7))), subImg)
     #cv2.imwrite(outputPath+ '{0}imgLabeled_{1}.jpg'.format("N",(numToIndex(i+indexStart,7))), nonMotionImg)
@@ -123,6 +122,11 @@ plt.imshow(imgA)
 plt.scatter(subLocation[0],subLocation[1])
 plt.show()
 
+index=7477
+for x in range(0,4):
+  for y in range(0,4):
+    makeGridClassifiedImgs("C:/Users/jmara/OneDrive/Documents/GitHub/WormTrackV2/ClassifierInput/","C:/Users/jmara/OneDrive/Documents/GitHub/WormTrackV2/ClassifierOutput/",[140+x*80,100+y*80],subDims,[64,64],15,index+2)
+    a= getImgList("C:/Users/jmara/OneDrive/Documents/GitHub/WormTrackV2/ClassifierOutput/")
+    index= int(a[-1].split('_')[-1][0:7])
 
-makeGridClassifiedImgs("C:/Users/jmara/OneDrive/Documents/GitHub/WormTrackV2/ClassifierInput","C:/Users/jmara/OneDrive/Documents/GitHub/WormTrackV2/ClassifierOutput",subLocation,subDims,[64,64],10,7477)
 
