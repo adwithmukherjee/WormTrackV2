@@ -8,28 +8,31 @@ import matplotlib.pyplot as plt
 from keras import preprocessing
 
 def dataset(file_list, size=(400,512), flattened=False): #,size=(300,180)
-	data = []
-	for i, file in enumerate(file_list):
-		image = plt.imread(file)
-		#image = transform.resize(image, size, mode='constant')
-		if flattened:
-			image = image.flatten()
+  data = []
+  for i, file in enumerate(file_list):
+    image = plt.imread(file)
+    #image = transform.resize(image, size, mode='constant')
+    if flattened:
+      image = image.flatten()
 
-		data.append(image)
+    data.append(image)
 
-	labels = [1 if f.split("/")[-1][0] == 'W' else 0 for f in file_list]
+  labels = [1 if f.split("/")[-1][0] == 'W' else 0 for f in file_list]
 
 
-	return np.array(data), np.array(labels)
+  return np.array(data), np.array(labels)
  
-def ImgArray(file_list):
-	outputArray=[]
-	for i, file in enumerate(file_list):
-		image = plt.imread(file)
-		outputArray.append(image)
-	return np.array(outputArray)
+def ImgArray(file_list, step=1):
+  outputArray=[]
+  z = 0
+  for i, file in enumerate(file_list):
+    if (z%step)==0:
+      image = plt.imread(file)
+      outputArray.append(image)
+    z=z+1
+  return np.array(outputArray)
 
-def ImgArrayResize(path,resizeDims=(64,64,3)):
+def ImgArrayResize(path,step=1,resizeDims=(64,64,3)):
     list1= getImgList(path)
     imgList= []
     for i, file in enumerate(list1):
@@ -43,10 +46,10 @@ def getImgList(path):
   imlist.sort()
   return imlist 
 
-def folderToImgArray(ImgPath):
+def folderToImgArray(ImgPath, step=1):
   imlist= glob.glob(os.path.join(ImgPath, '*.jpg'))
   imlist.sort()
-  output= ImgArray(imlist)
+  output= ImgArray(imlist, step)
   return output
 
 def folderToResizeImgArray(ImgPath,newDim):
@@ -136,9 +139,9 @@ def frame_compare(img1,img2,showImg=False):
 
 
   dif_sens=40 #remove later
-  dif_sense= 4 #was 10
+  dif_sense= 10 #was 10
 
-  motion_sensitivity=1.1 * 10
+  motion_sensitivity=1.1 * 1000
 
   xavg=0
   yavg=0
@@ -215,9 +218,9 @@ def frame_compare(img1,img2,showImg=False):
   return pos
 
 def getImgList(ImgPath):
-	imlist = glob.glob(os.path.join(ImgPath, '*.jpg'))
-	imlist.sort()
-	return imlist
+  imlist = glob.glob(os.path.join(ImgPath, '*.jpg'))
+  imlist.sort()
+  return imlist
 
 
 def numToIndex(n,numDigits):

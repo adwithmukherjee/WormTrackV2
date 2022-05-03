@@ -2,4 +2,4 @@ def hello():
     print('hello')
 
 
-hello()
+print(0%5)
