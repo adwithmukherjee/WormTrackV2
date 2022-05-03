@@ -57,9 +57,28 @@ def is_wormAdwith(categorical_dist):
     c = np.array(categorical_dist)
     np.max()
 
+def batchPrediction(folderPath, model):
+    imgs=ImgArrayResize(folderPath, (224,224,3))
+    listlen= imgs.shape[0]
+
+    pred_key= np.zeros((listlen))
+    conf_key= np.zeros((listlen))
+    for x in range(0,listlen):
+        prepped_img= keras.applications.mobilenet.preprocess_input(imgs[x])
+        prepped_img= np.array([prepped_img])
+        dist= model.predict(prepped_img)[0]
+        #print(dist)
+        is_wormy = np.argmax(dist)
+        certainty= dist[is_wormy]
+        pred_key[x]=is_wormy
+        conf_key[x]= certainty
+    return pred_key, conf_key
+
+
+
 
 #model1 : Model = load_model('D:/WormTrack/WormData/TrainedModels/Model1')
-# model1 : Model = load_model('TrainedModels/Model1')
+model1 : Model = load_model('TrainedModels/Model1')
 
 # makeSinglePrediction('C:/Users/jmara/OneDrive/Documents/GitHub/WormTrackV2/ClassifierInput/NimgLabeled_0351.jpg') 
 # makeSinglePrediction('C:/Users/jmara/OneDrive/Documents/GitHub/WormTrackV2/ClassifierInput/WimgLabeled_0005991.jpg')
@@ -86,8 +105,26 @@ def is_wormAdwith(categorical_dist):
 # p=np.asarray(imgArray1)
 # print(p.shape)
 
-array1= folderToImgArray('ClassifierInput/',True, (64,64,3))
-print(array1.shape)
-plt.imshow(array1[2])
-plt.show()
+# array1= folderToResizeImgArray('ClassifierInput/',(64,64,3))
+# print(array1.shape)
+# plt.imshow(array1[2])
+# plt.show()
+
+#a=plt.imread('ClassifierInput/wormy.jpg')
+# iArray= np.array
+# a= np.asarray(preprocessing.image.load_img('ClassifierInput/chicken.jpg', target_size=(64,64,3)))
+# b= np.asarray(preprocessing.image.load_img('ClassifierInput/wormy.jpg', target_size=(64,64,3)))
+# c= np.array((a,b))
+# a= np.asarray(a)
+# print(a.shape)
+# print(b.shape)
+# print(c.shape)
+# plt.imshow(c[1,:,:,:])
+# plt.show()
+
+
+# out= ImgArrayResize('ClassifierInput/',(64,64,3))
+# print(out.shape)
+
+out= batchPrediction('ClassifierInput/',model1)
 

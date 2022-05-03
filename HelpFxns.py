@@ -29,28 +29,36 @@ def ImgArray(file_list):
 		outputArray.append(image)
 	return np.array(outputArray)
 
-def ImgArrayResized(file_list,resizeDim):
-  outputArray=[]
-  for file in enumerate(file_list):
-    image= preprocessing.image.load_img(file, target_size= resizeDim)
-    outputArray.append(image)
-
-  return np.array(outputArray)
+def ImgArrayResize(path,resizeDims=(64,64,3)):
+    list1= getImgList(path)
+    imgList= []
+    for i, file in enumerate(list1):
+        a= np.asarray(preprocessing.image.load_img(file, target_size=resizeDims))
+        imgList.append(a)
+    imgArray= np.asarray(imgList)
+    return imgArray
 
 def getImgList(path):
   imlist = glob.glob(os.path.join(path, '*.jpg'))
   imlist.sort()
   return imlist 
 
-def folderToImgArray(ImgPath, resize = False, resizeDim=(0,0,3)):
-	imlist = glob.glob(os.path.join(ImgPath, '*.jpg'))
-	imlist.sort()
-  
-  if resize == True:
-    output= ImgArray(imlist,resizeDim)
-  else:
-    output= ImgArray(imlist)
+def folderToImgArray(ImgPath):
+  imlist= glob.glob(os.path.join(ImgPath, '*.jpg'))
+  imlist.sort()
+  output= ImgArray(imlist)
   return output
+
+def folderToResizeImgArray(ImgPath,newDim):
+  imlist= glob.glob(os.path.join(ImgPath, '*.jpg'))
+  imlist.sort()
+  outputArray=[]
+  for file in enumerate(imlist):
+    image= preprocessing.image.load_img(file, target_size=newDim)
+    outputArray.append(image)
+  return outputArray
+
+  
 
 def loadNetworkImage(path):
   b= preprocessing.image.load_img(path, target_size=(64,64,3))
@@ -267,4 +275,4 @@ def tempRename(path):
 # print('hello there')
 # a.sort()
 # print(a[0:5])
-sort_rename('D:/WormTrack/WormData/LabeledBackup/')
+#sort_rename('D:/WormTrack/WormData/LabeledBackup/')
