@@ -1,4 +1,4 @@
-import io
+from skimage import io
 import glob
 import os
 from pydoc import doc
