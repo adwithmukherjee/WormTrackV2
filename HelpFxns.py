@@ -1,13 +1,16 @@
-import io
+from skimage import io
 import glob
 import os
+from pydoc import doc
 import numpy as np
 import matplotlib.pyplot as plt
+
+from keras import preprocessing
 
 def dataset(file_list, size=(400,512), flattened=False): #,size=(300,180)
 	data = []
 	for i, file in enumerate(file_list):
-		image = io.imread(file)
+		image = plt.imread(file)
 		#image = transform.resize(image, size, mode='constant')
 		if flattened:
 			image = image.flatten()
@@ -22,16 +25,45 @@ def dataset(file_list, size=(400,512), flattened=False): #,size=(300,180)
 def ImgArray(file_list):
 	outputArray=[]
 	for i, file in enumerate(file_list):
-		image = io.imread(file)
+		image = plt.imread(file)
 		outputArray.append(image)
 	return np.array(outputArray)
- 
- 
+
+def ImgArrayResize(path,resizeDims=(64,64,3)):
+    list1= getImgList(path)
+    imgList= []
+    for i, file in enumerate(list1):
+        a= np.asarray(preprocessing.image.load_img(file, target_size=resizeDims))
+        imgList.append(a)
+    imgArray= np.asarray(imgList)
+    return imgArray
+
+def getImgList(path):
+  imlist = glob.glob(os.path.join(path, '*.jpg'))
+  imlist.sort()
+  return imlist 
+
 def folderToImgArray(ImgPath):
-	imlist = glob.glob(os.path.join(ImgPath, '*.jpg'))
-	imlist.sort()
-	output= ImgArray(imlist)
-	return output
+  imlist= glob.glob(os.path.join(ImgPath, '*.jpg'))
+  imlist.sort()
+  output= ImgArray(imlist)
+  return output
+
+def folderToResizeImgArray(ImgPath,newDim):
+  imlist= glob.glob(os.path.join(ImgPath, '*.jpg'))
+  imlist.sort()
+  outputArray=[]
+  for file in enumerate(imlist):
+    image= preprocessing.image.load_img(file, target_size=newDim)
+    outputArray.append(image)
+  return outputArray
+
+  
+
+def loadNetworkImage(path):
+  b= preprocessing.image.load_img(path, target_size=(64,64,3))
+  return b
+  
 
 
 ## This block gets the list of x,y positions for each frame
@@ -175,7 +207,7 @@ def frame_compare(img1,img2,showImg=False):
     plt.subplot(2,2,4)
     plt.imshow(img2)
 
-  #Bring Back later
+  #Bring Back
   # plt.subplot(1,1,1)
   # plt.imshow(img2)
   # plt.scatter(xavg,yavg)
@@ -196,7 +228,7 @@ def numToIndex(n,numDigits):
   out= out+ num
   return out
 
-def sort_rename(path,):
+def sort_rename(path):
   #Takes in a path to a file of numbered, sequential images
   #renames all the files in the directory with '_*' sequential number from 1:n added
 
@@ -210,7 +242,7 @@ def sort_rename(path,):
 
   i=1
   for filename in ldseg:
-    dst =  filename.split('_')[0] + '_' + numToIndex(i,4) + '.jpg' #removes original index marker after a "_"
+    dst =  filename.split('_')[0] + '_' + numToIndex(i,5) + '.jpg' #removes original index marker after a "_"
     print(dst)
     print(filename)
     src =filename
@@ -219,4 +251,28 @@ def sort_rename(path,):
     os.rename(src, dst)
     i += 1
 
-#sort_rename(path)
+def tempRename(path):
+  ldseg = glob.glob(os.path.join(path, '*.jpg')) #pulls list of all files in folder
+  print('Dataset contains {} images'.format(len(ldseg))) #returns how many images in list
+  listlen= len(ldseg)
+
+  for filename in ldseg:
+    end= filename.split('_')[-1]
+    print(end)
+    if len(end)<9:
+      end= '000'+ end
+      dst= filename.split('_')[0] + end
+      os.rename(filename,dst)
+    print(end)
+    
+
+
+
+
+#sort_rename('D:/WormTrack/WormData/Labeled/')
+# a=getImgList('D:/WormTrack/WormData/Labeled_Backup/')
+# print(a[0:5])
+# print('hello there')
+# a.sort()
+# print(a[0:5])
+#sort_rename('D:/WormTrack/WormData/LabeledBackup/')
