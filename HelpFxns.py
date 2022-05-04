@@ -70,8 +70,7 @@ def loadNetworkImage(path):
 
 
 ## This block gets the list of x,y positions for each frame
-def getPosList(imgArray, stepSize='1'):
-  stepSize=5
+def getPosList(imgArray, stepSize=1):
   #poslist= np.zeros((listlen-1, 2)) #x,y
   poslist= np.empty((0,2), int)
 
@@ -268,7 +267,27 @@ def tempRename(path):
       os.rename(filename,dst)
     print(end)
     
+def showLabeledVid(imgArray,posList,fps=30,overlay=True):
+    fg= plt.figure()
+    ax = fg.gca()
+    h = ax.imshow(imgArray[0])
 
+    i=0
+    if overlay:
+        #for img in imgs:
+        for ii in range(1, posList.shape[0]):
+            h.set_data(imgArray[ii])
+            plt.draw()
+            a = plt.scatter(posList[ii-1,0],posList[ii-1,1],s=3)
+            plt.pause(fps/60)
+            a.remove()
+            i+=1
+    else:
+        for ii in range(1, posList.shape[0]):
+            h.set_data(imgArray[ii])
+            plt.draw()
+            plt.pause(1/fps)
+            i+=1
 
 
 

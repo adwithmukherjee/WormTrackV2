@@ -6,11 +6,13 @@ import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 from keras import preprocessing
+from keras.applications.mobilenet import preprocess_input
 #from keras import *
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import PIL as pil 
 from PIL import Image
+import cv2
 
 from keras.models import Sequential, Model
 plt.rcParams['axes.grid']=False
@@ -40,6 +42,23 @@ def makeSinglePrediction(imagePath, model):
     img = np.array([img])
 
     dist = model.predict(img)[0]
+
+    is_wormy = np.argmax(dist)
+
+    certainty = dist[is_wormy]
+    
+    print('WORM?', is_wormy)
+    print('CERTAINTY: ', certainty)
+
+    return is_wormy, certainty
+
+def predictSingleImg(imgAny, model):
+    
+    imgAny= cv2.resize(imgAny,dsize=(224,224))
+    imgAny= keras.applications.mobilenet.preprocess_input(imgAny)
+
+    imgAny= np.array([imgAny])
+    dist = model.predict(imgAny)[0]
 
     is_wormy = np.argmax(dist)
 
