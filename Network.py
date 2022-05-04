@@ -55,7 +55,7 @@ import numpy as np
 import os
 import cv2
 from sklearn.model_selection import train_test_split
-import tensorflow as tf
+import tensorflow
 from tensorflow import keras
 from tensorflow.keras import backend as K
 from tensorflow.keras.layers import Dense, Activation,Dropout,Conv2D, MaxPooling2D,BatchNormalization, Flatten
