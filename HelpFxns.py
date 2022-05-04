@@ -1,6 +1,7 @@
 from skimage import io
 import glob
 import os
+import cv2
 from pydoc import doc
 import numpy as np
 import matplotlib.pyplot as plt
@@ -31,6 +32,43 @@ def ImgArray(file_list, step=1):
       outputArray.append(image)
     z=z+1
   return np.array(outputArray)
+
+def vidToImage(video_file):
+  video = cv2.VideoCapture(video_file)
+
+  try:
+    if not os.path.exists('frames'):
+        os.makedirs('frames')
+  except OSError:
+    print ('Error: Creating directory of data')
+  
+  currentframe = 0
+  
+  
+  while(True):
+      
+    # reading from frame
+    ret,frame = video.read()
+  
+    if ret:
+        # if video is still left continue creating images
+        name = './frames/frame' + str(numToIndex(currentframe, 4)) + '.jpg'
+        print ('Creating...' + name)
+  
+        # writing the extracted images
+        cv2.imwrite(name, frame)
+  
+        # increasing counter so that it will
+        # show how many frames are created
+        currentframe += 1
+    else:
+        break
+    # Release all space and windows once done
+  video.release()
+  cv2.destroyAllWindows()
+
+ 
+
 
 def ImgArrayResize(path,step=1,resizeDims=(64,64,3)):
     list1= getImgList(path)
