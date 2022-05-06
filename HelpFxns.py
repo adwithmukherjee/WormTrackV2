@@ -114,6 +114,7 @@ def getPosList(imgArray, stepSize=1):
 
 
   for i in range(0,imgArray.shape[0]-1,stepSize):
+    #print(f'Analyzing frame {i}') #this is taking about 1 second per frame... would take over 10 mins to do the whole folder
     img1=imgArray[i,:,:,:]
     img2=imgArray[i+1,:,:,:]
 
