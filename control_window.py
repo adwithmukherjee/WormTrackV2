@@ -6,7 +6,9 @@
 # 4. check for showing tracker
 from psychopy import gui
 
-from HelpFxns import ImgArray, folderToImgArray, getPosList
+import cv2
+
+from HelpFxns import ImgArray, folderToImgArray, getPosList, folderToResizeImgArray, vidToImage
 
 #title dialog box
 myDlg = gui.Dlg(title="WORMS WORMS WORMS")
@@ -37,13 +39,27 @@ if myDlg.OK:  # or if ok_data is not None
     print(filepath)
 
     #direct to turn filepath into frames
-    imgs = folderToImgArray(filepath)
+    directory = vidToImage(filepath)
+    imgs = folderToImgArray('frames')
+    print(imgs.shape)
+
+    #direct to DT if selected
     if nn_or_dt == 'Difference Tracker':
         positions = getPosList(imgs)
-        print(positions)
+
+        if show_tracker ==True:
+            #input rayna code for overlaying video and poslist HERE
+            print(show_tracker)
         
+        else:
+            #input rayna code for videos without tracker
+            print(show_tracker)
 
 
+    else: 
+        #input what happens for neural net here, add later
+        print('WORM NEURAL NET')
+    
 else:
     print('user cancelled') 
 

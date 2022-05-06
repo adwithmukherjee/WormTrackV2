@@ -1,6 +1,7 @@
 from skimage import io
 import glob
 import os
+import cv2
 from pydoc import doc
 import numpy as np
 import matplotlib.pyplot as plt
@@ -31,6 +32,43 @@ def ImgArray(file_list, step=1):
       outputArray.append(image)
     z=z+1
   return np.array(outputArray)
+
+def vidToImage(video_file):
+  video = cv2.VideoCapture(video_file)
+
+  try:
+    if not os.path.exists('frames'):
+        os.makedirs('frames')
+  except OSError:
+    print ('Error: Creating directory of data')
+  
+  currentframe = 0
+  
+  
+  while(True):
+      
+    # reading from frame
+    ret,frame = video.read()
+  
+    if ret:
+        # if video is still left continue creating images
+        name = './frames/frame' + str(numToIndex(currentframe, 4)) + '.jpg'
+        print ('Creating...' + name)
+  
+        # writing the extracted images
+        cv2.imwrite(name, frame)
+  
+        # increasing counter so that it will
+        # show how many frames are created
+        currentframe += 1
+    else:
+        break
+    # Release all space and windows once done
+  video.release()
+  cv2.destroyAllWindows()
+
+ 
+
 
 def ImgArrayResize(path,step=1,resizeDims=(64,64,3)):
     list1= getImgList(path)
@@ -70,8 +108,7 @@ def loadNetworkImage(path):
 
 
 ## This block gets the list of x,y positions for each frame
-def getPosList(imgArray, stepSize='1'):
-  stepSize=5
+def getPosList(imgArray, stepSize=1):
   #poslist= np.zeros((listlen-1, 2)) #x,y
   poslist= np.empty((0,2), int)
 
@@ -268,7 +305,27 @@ def tempRename(path):
       os.rename(filename,dst)
     print(end)
     
+def showLabeledVid(imgArray,posList,fps=30,overlay=True):
+    fg= plt.figure()
+    ax = fg.gca()
+    h = ax.imshow(imgArray[0])
 
+    i=0
+    if overlay:
+        #for img in imgs:
+        for ii in range(1, posList.shape[0]):
+            h.set_data(imgArray[ii])
+            plt.draw()
+            a = plt.scatter(posList[ii-1,0],posList[ii-1,1],s=3)
+            plt.pause(fps/60)
+            a.remove()
+            i+=1
+    else:
+        for ii in range(1, posList.shape[0]):
+            h.set_data(imgArray[ii])
+            plt.draw()
+            plt.pause(1/fps)
+            i+=1
 
 
 
