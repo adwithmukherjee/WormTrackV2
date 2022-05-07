@@ -113,7 +113,8 @@ def getPosListNew(imgArray, stepSize=1, useNeuralNet=False):
   imgRowSize= imgArray.shape(1)
   imgColSize= imgArray.shape(2)
   subDim= int(max(imgRowSize,imgColSize)/8)
-  subSize= (subDim,subDim,3)
+  #subSize= (subDim,subDim,3)
+  subSize=(64,64,3) # just for now
   if useNeuralNet:
       model : Model = load_model('TrainedModels/Model1')
 
@@ -139,6 +140,7 @@ def getPosListNew(imgArray, stepSize=1, useNeuralNet=False):
     elif abs(pos[0]-prev[0])>subDim or abs(pos[1]-prev[1])>subDim and useNeuralNet:
         print('abnormally fast movement detected at frame(', i+1,') checking with Neural Net')
         check= pullSub(img2,pos,subSize)
+        check= cv2.resize(check, dsize=())
         iswormNew= predictSingleImg(check, model)
         checkprev= pullSub(img2,prev,subSize)
         iswormPrev= predictSingleImg(checkprev,model)
@@ -157,3 +159,4 @@ def getPosListNew(imgArray, stepSize=1, useNeuralNet=False):
     poslist= np.append(poslist,np.array([pos]),axis=0)
     
   return poslist
+
