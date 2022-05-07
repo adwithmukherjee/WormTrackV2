@@ -47,7 +47,7 @@ def frame_compare(img1,img2,showImg=False):
 
   difArray= np.zeros((sum.shape[0],sum.shape[1]))
   #print(difArray.shape)
-  totPixelDif=0;
+  totPixelDif=0
   numNonZpixels=0
   for pixelx in range(0,colLen):
     for pixely in range(0,rowLen):
@@ -113,8 +113,7 @@ def getPosListNew(imgArray, stepSize=1, useNeuralNet=False):
   imgRowSize= imgArray.shape(1)
   imgColSize= imgArray.shape(2)
   subDim= int(max(imgRowSize,imgColSize)/8)
-  #subSize= (subDim,subDim,3)
-  subSize=(64,64,3) # just for now
+  subSize= (subDim,subDim,3)
   if useNeuralNet:
       model : Model = load_model('TrainedModels/Model1')
 
@@ -160,3 +159,5 @@ def getPosListNew(imgArray, stepSize=1, useNeuralNet=False):
     
   return poslist
 
+
+a=getPosListNew()

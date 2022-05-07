@@ -145,5 +145,11 @@ model1 : Model = load_model('TrainedModels/Model1')
 # out= ImgArrayResize('ClassifierInput/',(64,64,3))
 # print(out.shape)
 
-out= batchPrediction('ClassifierInput/',model1)
+#out= batchPrediction('ClassifierInput/',model1)
+
+
+a=plt.imread('Classifier2/vid7_001.jpg')
+plt.imshow(a)
+plt.show()
+#predictSingleImg()
 

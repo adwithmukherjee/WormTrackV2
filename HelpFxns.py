@@ -5,6 +5,7 @@ import cv2
 from pydoc import doc
 import numpy as np
 import matplotlib.pyplot as plt
+import pickle
 
 from keras import preprocessing
 
@@ -268,6 +269,17 @@ def numToIndex(n,numDigits):
     out= out+'0'
   out= out+ num
   return out
+
+def listToFile(listName, outFilename):
+    outfile= open(outFilename,'wb')
+    pickle.dump(listName,outfile)
+    outfile.close()
+
+def listFromFile(inFilename):
+    infile= open(inFilename,'rb')
+    out_object= pickle.load(infile)
+    infile.close()
+    return out_object
 
 def sort_rename(path):
   #Takes in a path to a file of numbered, sequential images
