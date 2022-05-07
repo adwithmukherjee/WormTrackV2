@@ -9,7 +9,8 @@ Posfile='PositionListMem'
 #imgArray= folderToImgArray('Classifier2/',step=5)
 #np.save('imageArr.npy',imgArray)
 
-array=np.load('imageArr.npy')
+# array=np.load('imageArr.npy')
+array= folderToImgArray('Classifier2/',1)
 print(array.shape)
 
 
@@ -22,7 +23,7 @@ print(array.shape)
 ## run position tracker Neural Network
 
 PosList= getPosListNew(array) 
-listToFile(PosList, Posfile) 
+#listToFile(PosList, Posfile) 
 
 
 

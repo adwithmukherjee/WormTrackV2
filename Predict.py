@@ -55,6 +55,7 @@ def makeSinglePrediction(imagePath, model):
 def predictSingleImg(imgAny, model):
     
     imgAny= cv2.resize(imgAny,dsize=(224,224))
+    print(imgAny.shape)
     imgAny= keras.applications.mobilenet.preprocess_input(imgAny)
 
     imgAny= np.array([imgAny])
@@ -149,7 +150,9 @@ model1 : Model = load_model('TrainedModels/Model1')
 
 
 a=plt.imread('Classifier2/vid7_001.jpg')
+a=pullSub(a,[340,225],(64,64))
+print(a.shape)
 plt.imshow(a)
 plt.show()
-#predictSingleImg()
+predictSingleImg(a,model1)
 

@@ -110,8 +110,8 @@ def getPosListNew(imgArray, stepSize=1, useNeuralNet=False):
   #poslist= np.zeros((listlen-1, 2)) #x,y
   poslist= np.empty((0,2), int)
   prev=[0,0]
-  imgRowSize= imgArray.shape(1)
-  imgColSize= imgArray.shape(2)
+  imgRowSize= imgArray.shape[1]
+  imgColSize= imgArray.shape[2]
   subDim= int(max(imgRowSize,imgColSize)/8)
   subSize= (subDim,subDim,3)
   if useNeuralNet:
@@ -160,4 +160,4 @@ def getPosListNew(imgArray, stepSize=1, useNeuralNet=False):
   return poslist
 
 
-a=getPosListNew()
+#a=getPosListNew()
