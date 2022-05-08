@@ -43,12 +43,22 @@ def makeSinglePrediction(imagePath, model):
 
     dist = model.predict(img)[0]
 
-    is_wormy = np.argmax(dist)
+    #is_wormy = np.argmax(dist)
+    if dist[1]>0.5:
+        is_wormy= 1
+    else:
+        is_wormy=0
 
-    certainty = dist[is_wormy]
+    #certainty = dist[is_wormy]
+    if is_wormy==1:
+        certainty= dist[1]
+    else:
+        #certainty= dist[0]
+        certainty= dist[1]
     
     print('WORM?', is_wormy)
     print('CERTAINTY: ', certainty)
+    print(dist)
 
     return is_wormy, certainty
 
@@ -61,12 +71,22 @@ def predictSingleImg(imgAny, model):
     imgAny= np.array([imgAny])
     dist = model.predict(imgAny)[0]
 
-    is_wormy = np.argmax(dist)
+    #is_wormy = np.argmax(dist)
+    if dist[1]>0.5:
+        is_wormy= 1
+    else:
+        is_wormy=0
 
-    certainty = dist[is_wormy]
+    #certainty = dist[is_wormy]
+    if is_wormy==1:
+        certainty= dist[1]
+    else:
+        #certainty= dist[0]
+        certainty= dist[1]
     
     print('WORM?', is_wormy)
     print('CERTAINTY: ', certainty)
+
 
     return is_wormy, certainty
 

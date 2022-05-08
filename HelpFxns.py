@@ -340,7 +340,17 @@ def showLabeledVid(imgArray,posList,fps=30,overlay=True):
             plt.pause(1/fps)
             i+=1
 
+def showImgArray(imgArray, fps=30):
+  fg= plt.figure()
+  ax = fg.gca()
+  h = ax.imshow(imgArray[0])
 
+  i=0
+  for ii in range(1, imgArray.shape[0]):
+      h.set_data(imgArray[ii])
+      plt.draw()
+      plt.pause(1/fps)
+      i+=1
 
 #sort_rename('D:/WormTrack/WormData/Labeled/')
 # a=getImgList('D:/WormTrack/WormData/Labeled_Backup/')

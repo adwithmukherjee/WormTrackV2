@@ -5,12 +5,13 @@ import pandas as pd
 import pickle
 
 ##load image array
-Posfile='PositionListMem'
-#imgArray= folderToImgArray('Classifier2/',step=5)
-#np.save('imageArr.npy',imgArray)
+# Posfile='PositionListMem'
+NetPosListFile='NetPosList'
+# imgArray= folderToImgArray('Classifier2/',step=5)
+# np.save('imageArr.npy',imgArray)
 
 # array=np.load('imageArr.npy')
-array= folderToImgArray('Classifier2/',1)
+array= folderToImgArray('Classifier2/',5)
 print(array.shape)
 
 
@@ -22,24 +23,15 @@ print(array.shape)
 
 ## run position tracker Neural Network
 
-PosList= getPosListNew(array) 
-#listToFile(PosList, Posfile) 
+netPosList= getPosListNew(array) 
+listToFile(netPosList, NetPosListFile) 
 
-
-
-
-
-
-
-
-
-
-
+print(netPosList)
 
 ## 
 
 
-posList=listFromFile(Posfile)
-print(posList)
+netPosList=listFromFile(NetPosListFile)
+#print(posList)
 
-showLabeledVid(array,posList)
+showLabeledVid(array,netPosList)

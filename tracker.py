@@ -106,7 +106,7 @@ def frame_compare(img1,img2,showImg=False):
 
   return pos
 
-def getPosListNew(imgArray, stepSize=1, useNeuralNet=False):
+def getPosListNew(imgArray, stepSize=1, useNeuralNet=True):
   #poslist= np.zeros((listlen-1, 2)) #x,y
   poslist= np.empty((0,2), int)
   prev=[0,0]
@@ -123,6 +123,7 @@ def getPosListNew(imgArray, stepSize=1, useNeuralNet=False):
 
     pos=frame_compare(img1,img2)
     #print(pos)
+    print('FRAME ',i+1,' ----------------------------------------')
     if pos==[1,1] and useNeuralNet==False:
         print('no movement at frame(', i+1, ')')
         pos=prev
@@ -134,12 +135,13 @@ def getPosListNew(imgArray, stepSize=1, useNeuralNet=False):
         isworm= predictSingleImg(checkimg, model)
         if isworm[0]==1:
             pos= prev
+            print('net found worm')
         else:
-            print('lost worm at frame: ', i+1)
-    elif abs(pos[0]-prev[0])>subDim or abs(pos[1]-prev[1])>subDim and useNeuralNet:
+            print('net lost worm at frame: ', i+1)
+    elif (abs(pos[0]-prev[0])>subDim or abs(pos[1]-prev[1])>subDim) and useNeuralNet:
         print('abnormally fast movement detected at frame(', i+1,') checking with Neural Net')
         check= pullSub(img2,pos,subSize)
-        check= cv2.resize(check, dsize=())
+        check= cv2.resize(check, dsize=(64,64))
         iswormNew= predictSingleImg(check, model)
         checkprev= pullSub(img2,prev,subSize)
         iswormPrev= predictSingleImg(checkprev,model)
@@ -147,10 +149,10 @@ def getPosListNew(imgArray, stepSize=1, useNeuralNet=False):
             print('worm at both previous and old locations in frame(',i+1),"). Not designed for multi-worm tracking in this version"
         elif iswormPrev==1:
             pos=prev
-            print('abnormal movement successfully ignored at frame(',i+1,')')
+            print('abnormal movement successfully ignored at frame w net(',i+1,')')
         elif iswormNew==0 and iswormPrev==0:
             pos=[1,1]
-            print("worm found at neither location in frame(",i+1,'). Worm lost')
+            print("net worm found at neither location in frame(",i+1,'). Worm lost')
 
     if pos!= [1,1]:
         prev=pos
