@@ -43,50 +43,30 @@ def makeSinglePrediction(imagePath, model):
 
     dist = model.predict(img)[0]
 
-    #is_wormy = np.argmax(dist)
-    if dist[1]>0.5:
-        is_wormy= 1
-    else:
-        is_wormy=0
+    is_wormy = np.argmax(dist)
 
-    #certainty = dist[is_wormy]
-    if is_wormy==1:
-        certainty= dist[1]
-    else:
-        #certainty= dist[0]
-        certainty= dist[1]
+    certainty = dist[is_wormy]
     
-    print('WORM?', is_wormy)
-    print('CERTAINTY: ', certainty)
-    print(dist)
+    # print('WORM?', is_wormy)
+    # print('CERTAINTY: ', certainty)
 
     return is_wormy, certainty
 
-def predictSingleImg(imgAny, model):
+def predictSingleImg(imgAny, model): ###THIS FUNCTION WORKS
     
     imgAny= cv2.resize(imgAny,dsize=(224,224))
-    print(imgAny.shape)
+    # print(imgAny.shape)
     imgAny= keras.applications.mobilenet.preprocess_input(imgAny)
 
     imgAny= np.array([imgAny])
     dist = model.predict(imgAny)[0]
 
-    #is_wormy = np.argmax(dist)
-    if dist[1]>0.5:
-        is_wormy= 1
-    else:
-        is_wormy=0
+    is_wormy = np.argmax(dist)
 
-    #certainty = dist[is_wormy]
-    if is_wormy==1:
-        certainty= dist[1]
-    else:
-        #certainty= dist[0]
-        certainty= dist[1]
+    certainty = dist[is_wormy]
     
-    print('WORM?', is_wormy)
-    print('CERTAINTY: ', certainty)
-
+    # print('WORM?', is_wormy)
+    # print('CERTAINTY: ', certainty)   
 
     return is_wormy, certainty
 
@@ -169,10 +149,10 @@ model1 : Model = load_model('TrainedModels/Model1')
 #out= batchPrediction('ClassifierInput/',model1)
 
 
-a=plt.imread('Classifier2/vid7_001.jpg')
-a=pullSub(a,[340,225],(64,64))
-print(a.shape)
-plt.imshow(a)
-plt.show()
-predictSingleImg(a,model1)
+# a=plt.imread('Classifier2/vid7_001.jpg')
+# a=pullSub(a,[340,225],(64,64))
+# print(a.shape)
+# plt.imshow(a)
+# plt.show()
+# predictSingleImg(a,model1)
 

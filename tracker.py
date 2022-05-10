@@ -106,16 +106,17 @@ def frame_compare(img1,img2,showImg=False):
 
   return pos
 
-def getPosListNew(imgArray, stepSize=1, useNeuralNet=True):
+def getPosListNew(imgArray, stepSize=1, useNeuralNet = False):
   #poslist= np.zeros((listlen-1, 2)) #x,y
   poslist= np.empty((0,2), int)
   prev=[0,0]
   imgRowSize= imgArray.shape[1]
   imgColSize= imgArray.shape[2]
-  subDim= int(max(imgRowSize,imgColSize)/8)
+  #subDim= int(max(imgRowSize,imgColSize)/8) 
+  subDim= 128 ### This is temporary until i can get scaling box size
   subSize= (subDim,subDim,3)
-  if useNeuralNet:
-      model : Model = load_model('TrainedModels/Model1')
+  # if useNeuralNet:
+  model : Model = load_model('TrainedModels/Model1')
 
   for i in range(0,imgArray.shape[0]-1,stepSize):
     img1=imgArray[i,:,:,:]
@@ -123,7 +124,6 @@ def getPosListNew(imgArray, stepSize=1, useNeuralNet=True):
 
     pos=frame_compare(img1,img2)
     #print(pos)
-    print('FRAME ',i+1,' ----------------------------------------')
     if pos==[1,1] and useNeuralNet==False:
         print('no movement at frame(', i+1, ')')
         pos=prev
@@ -133,15 +133,17 @@ def getPosListNew(imgArray, stepSize=1, useNeuralNet=True):
         #checkimg= pullSub(img2,prev,[64,64,3])   ### later could pull different size Subs based on image size
         checkimg= pullSub(img2,prev,subSize)
         isworm= predictSingleImg(checkimg, model)
+
+        # plt.imshow(checkimg)
+        # plt.show()
         if isworm[0]==1:
             pos= prev
-            print('net found worm')
         else:
-            print('net lost worm at frame: ', i+1)
-    elif (abs(pos[0]-prev[0])>subDim or abs(pos[1]-prev[1])>subDim) and useNeuralNet:
+            print('lost worm at frame: ', i+1)
+    elif abs(pos[0]-prev[0])>subDim or abs(pos[1]-prev[1])>subDim and useNeuralNet:
         print('abnormally fast movement detected at frame(', i+1,') checking with Neural Net')
         check= pullSub(img2,pos,subSize)
-        check= cv2.resize(check, dsize=(64,64))
+        check= cv2.resize(check, dsize=(224,224))
         iswormNew= predictSingleImg(check, model)
         checkprev= pullSub(img2,prev,subSize)
         iswormPrev= predictSingleImg(checkprev,model)
@@ -149,10 +151,10 @@ def getPosListNew(imgArray, stepSize=1, useNeuralNet=True):
             print('worm at both previous and old locations in frame(',i+1),"). Not designed for multi-worm tracking in this version"
         elif iswormPrev==1:
             pos=prev
-            print('abnormal movement successfully ignored at frame w net(',i+1,')')
+            print('abnormal movement successfully ignored at frame(',i+1,')')
         elif iswormNew==0 and iswormPrev==0:
             pos=[1,1]
-            print("net worm found at neither location in frame(",i+1,'). Worm lost')
+            print("worm found at neither location in frame(",i+1,'). Worm lost')
 
     if pos!= [1,1]:
         prev=pos

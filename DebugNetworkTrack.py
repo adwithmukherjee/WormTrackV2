@@ -11,7 +11,7 @@ NetPosListFile='NetPosList'
 # np.save('imageArr.npy',imgArray)
 
 # array=np.load('imageArr.npy')
-array= folderToImgArray('Classifier2/',5)
+array= folderToImgArray('Classifier2/',1)
 print(array.shape)
 
 
