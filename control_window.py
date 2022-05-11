@@ -5,7 +5,13 @@
 # 3. check boxes for neural net or difference tracker
 # 4. check for showing tracker
 from psychopy import gui
-
+from psychopy import visual, monitors
+from psychopy.visual import Window
+from psychopy import core, event
+import time
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 import cv2
 
 from HelpFxns import ImgArray, folderToImgArray, getPosList, folderToResizeImgArray, vidToImage
@@ -36,12 +42,9 @@ if myDlg.OK:  # or if ok_data is not None
     show_tracker = ok_data[2]
     nn_or_dt = ok_data[3]
 
-    print(filepath)
-
     #direct to turn filepath into frames
     directory = vidToImage(filepath)
     imgs = folderToImgArray('frames')
-    print(imgs.shape)
 
     #direct to DT if selected
     if nn_or_dt == 'Difference Tracker':
@@ -49,12 +52,36 @@ if myDlg.OK:  # or if ok_data is not None
 
         if show_tracker ==True:
             #input rayna code for overlaying video and poslist HERE
-            print(show_tracker)
+            # make window and pixels
+            win = visual.Window([1024,800], color='blue', fullscr=0)
+
+            #show the images in order
+            for f in range(0,len(positions)):
+                x = 2*((positions[f][0])/512) - 1
+                y = 2*((positions[f][1])/400) - 1
+                c = visual.Circle(win, radius = 0.01, pos=(x, -y), fillColor='red', lineColor=None) #eventually need to load in positions
+                pic = visual.ImageStim(win, image=imgs[f], colorSpace='rgb', size=2) #size=2 fills the window
+                pic.draw()
+                c.draw()
+                win.flip() #flips the window to show it
+                time.sleep(0.5) #show frames every 0.5 seconds
+
+            input('exit')
         
         else:
             #input rayna code for videos without tracker
-            print(show_tracker)
+            # make window and pixels
+            win = visual.Window([1024,800], color='blue', fullscr=0)
 
+            #show the images in order
+            for f in range(0,len(positions)):
+                pic = visual.ImageStim(win, image=imgs[f], colorSpace='rgb', size=2) #size=2 fills the window
+                pic.draw()
+                c.draw()
+                win.flip() #flips the window to show it
+                time.sleep(0.5) #show frames every 0.5 seconds
+
+            input('exit')
 
     else: 
         #input what happens for neural net here, add later
