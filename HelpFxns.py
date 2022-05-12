@@ -35,7 +35,7 @@ def ImgArray(file_list, step=1):
   return np.array(outputArray)
 
 def vidToImage(video_file):
-  video = cv2.VideoCapture(video_file)
+  video = cv2.VideoCapture(video_file )
 
   try:
     if not os.path.exists('frames'):

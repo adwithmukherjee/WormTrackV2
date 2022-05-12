@@ -67,6 +67,16 @@ def scanImage(image):
 #         print(k)
 #         scanImage(img)
             
+def ScanImgBatch(imageArray):
+    ar=imageArray
+    #ar= folderToImgArray(folderPath)
+    k=0
+    for img in ar:
+        k+=1
+        if (k%10 == 0):
+            print(k)
+            x,y=scanImage(img)
+            print(x,y)
 
 
 
