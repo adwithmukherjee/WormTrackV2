@@ -5,6 +5,7 @@ import cv2
 from pydoc import doc
 import numpy as np
 import matplotlib.pyplot as plt
+import pickle
 
 from keras import preprocessing
 
@@ -291,6 +292,17 @@ def getImgList(ImgPath):
   imlist = glob.glob(os.path.join(ImgPath, '*.jpg'))
   imlist.sort()
   return imlist
+
+def listToFile(listName, outFilename):
+    outfile= open(outFilename,'wb')
+    pickle.dump(listName,outfile)
+    outfile.close()
+
+def listFromFile(inFilename):
+    infile= open(inFilename,'rb')
+    out_object= pickle.load(infile)
+    infile.close()
+    return out_object
 
 
 def numToIndex(n,numDigits):

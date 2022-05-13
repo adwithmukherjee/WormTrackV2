@@ -1,4 +1,5 @@
 frames/
+TrainedModels/
 *.pyc
 .DS_Store
 *.pyc
