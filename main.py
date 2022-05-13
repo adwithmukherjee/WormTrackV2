@@ -45,3 +45,6 @@ def trackerMain(imgLocation, methodNum, RefreshRate):
     print(savedPosList)
     print(len(savedPosList))
     showLabeledVid(imgArray,savedPosList,fps=30)
+
+
+#trackerMain('Classifier2/', 3, 1)

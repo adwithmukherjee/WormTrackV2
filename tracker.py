@@ -122,6 +122,7 @@ def getPosListNew(imgArray, stepSize=1, useNeuralNet = False):
     img1=imgArray[i,:,:,:]
     img2=imgArray[i+1,:,:,:]
 
+    print('Frame (', i+1, '):')
     pos=frame_compare(img1,img2)
     #print(pos)
     if pos==[1,1] and useNeuralNet==False:
