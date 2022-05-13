@@ -5,6 +5,8 @@
 # 3. check boxes for neural net or difference tracker
 # 4. check for showing tracker
 from psychopy import gui
+import os
+import glob
 from psychopy import visual, monitors
 from psychopy.visual import Window
 from psychopy import core, event
@@ -14,7 +16,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import cv2
 
-from HelpFxns import ImgArray, folderToImgArray, getPosList, folderToResizeImgArray, vidToImage, showLabeledVid
+from HelpFxns import ImgArray, folderToImgArray, folderToResizeImgArray, vidToImage, showLabeledVid
+from tracker import getPosListNew
 
 #title dialog box
 myDlg = gui.Dlg(title="WORMS WORMS WORMS")
@@ -31,7 +34,7 @@ myDlg.addField('Sensitivity:', 21)
 myDlg.addField('Show tracker:', initial=False)
 
 #choose to use neural net or difference tracker
-myDlg.addField('Tracker type:', choices=["Basic Neural Net", "Scanned Neural Net" " Difference Tracker"])
+myDlg.addField('Tracker type:', choices=["Neural Net", "Difference Tracker"])
 ok_data = myDlg.show()  # show dialog and wait for OK or Cancel
 
 if myDlg.OK:  # or if ok_data is not None
@@ -49,38 +52,50 @@ if myDlg.OK:  # or if ok_data is not None
 
     #direct to DT if selected
     if nn_or_dt == 'Difference Tracker':
-        positions = getPosList(imgs, stepSize = 15)
+        positions = getPosListNew(imgs, stepSize = 15)
         print('yay')
 
         if show_tracker ==True:
             #input rayna code for overlaying video and poslist HERE
+            ImgPath = "frames"
+            frames = glob.glob(os.path.join(ImgPath, '*.jpg'))
+            frames.sort()
+
+            print(f'Analyzing {len(frames)} frames')
+
             # make window and pixels
             win = visual.Window([1024,800], color='blue', fullscr=0)
+            win.clearBuffer()
 
-            # #show the images in order
-            for f in range(0,len(positions)):
-                x = 2*((positions[f][0])/512) - 1
-                y = 2*((positions[f][1])/400) - 1
+
+            #show the images in order
+            for f in range(0,len(frames)):#positionlist)):
+                x = 2*((positions[f][0])/512) - 1 #would want this to read the width of the image and divide by it
+                y = 2*((positions[f][1])/400) - 1 #would want this to read the height of the image and divide by it
                 c = visual.Circle(win, radius = 0.01, pos=(x, -y), fillColor='red', lineColor=None) #eventually need to load in positions
-                pic = visual.ImageStim(win, image=imgs[f], colorSpace='rgb', size=2) #size=2 fills the window
+                pic = visual.ImageStim(win, image=frames[f], colorSpace='rgb', size=2) #size=2 fills the window
                 pic.draw()
-                c.draw()
                 win.flip() #flips the window to show it
                 time.sleep(0.5) #show frames every 0.5 seconds
 
             input('exit')
 
-            # showLabeledVid(imgs, positions)
+
         else:
             #input rayna code for videos without tracker
+            ImgPath = "frames/"
+            frames = glob.glob(os.path.join(ImgPath, '*.jpg'))
+            frames.sort()
+
+            print(f'Analyzing {len(frames)} frames')
             # make window and pixels
             win = visual.Window([1024,800], color='blue', fullscr=0)
+            win.clearBuffer()
 
             #show the images in order
             for f in range(0,len(positions)):
                 pic = visual.ImageStim(win, image=imgs[f], colorSpace='rgb', size=2) #size=2 fills the window
                 pic.draw()
-                c.draw()
                 win.flip() #flips the window to show it
                 time.sleep(0.5) #show frames every 0.5 seconds
 
@@ -88,7 +103,52 @@ if myDlg.OK:  # or if ok_data is not None
 
     else: 
         #input what happens for neural net here, add later
-        print('WORM NEURAL NET')
+        positions = getPosListNew(imgs, stepSize = 15, useNeuralNet=True)
+
+        if show_tracker==True:
+            ImgPath = "frames"
+            frames = glob.glob(os.path.join(ImgPath, '*.jpg'))
+            frames.sort()
+
+            print(f'Analyzing {len(frames)} frames')
+
+            # make window and pixels
+            win = visual.Window([1024,800], color='blue', fullscr=0)
+            win.clearBuffer()
+
+
+            #show the images in order
+            for f in range(0,len(frames)):#positionlist)):
+                x = 2*((positions[f][0])/512) - 1 #would want this to read the width of the image and divide by it
+                y = 2*((positions[f][1])/400) - 1 #would want this to read the height of the image and divide by it
+                c = visual.Circle(win, radius = 0.01, pos=(x, -y), fillColor='red', lineColor=None) #eventually need to load in positions
+                pic = visual.ImageStim(win, image=frames[f], colorSpace='rgb', size=2) #size=2 fills the window
+                pic.draw()
+                win.flip() #flips the window to show it
+                time.sleep(0.5) #show frames every 0.5 seconds
+                
+            input('exit')
+        
+        else:
+            ImgPath = "frames/"
+            frames = glob.glob(os.path.join(ImgPath, '*.jpg'))
+            frames.sort()
+
+            print(f'Analyzing {len(frames)} frames')
+            # make window and pixels
+            win = visual.Window([1024,800], color='blue', fullscr=0)
+            win.clearBuffer()
+
+            #show the images in order
+            for f in range(0,len(positions)):
+                pic = visual.ImageStim(win, image=imgs[f], colorSpace='rgb', size=2) #size=2 fills the window
+                pic.draw()
+                win.flip() #flips the window to show it
+                time.sleep(0.5) #show frames every 0.5 seconds
+
+            input('exit') 
+
+        
     
 else:
     print('user cancelled') 
