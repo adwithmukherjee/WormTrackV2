@@ -31,7 +31,7 @@ myDlg.addField('Sensitivity:', 21)
 myDlg.addField('Show tracker:', initial=False)
 
 #choose to use neural net or difference tracker
-myDlg.addField('Tracker type:', choices=["Neural Net", "Difference Tracker"])
+myDlg.addField('Tracker type:', choices=["Basic Neural Net", "Scanned Neural Net" " Difference Tracker"])
 ok_data = myDlg.show()  # show dialog and wait for OK or Cancel
 
 if myDlg.OK:  # or if ok_data is not None
@@ -49,28 +49,28 @@ if myDlg.OK:  # or if ok_data is not None
 
     #direct to DT if selected
     if nn_or_dt == 'Difference Tracker':
-        positions = getPosList(imgs)
+        positions = getPosList(imgs, stepSize = 15)
         print('yay')
 
         if show_tracker ==True:
             #input rayna code for overlaying video and poslist HERE
             # make window and pixels
-            # win = visual.Window([1024,800], color='blue', fullscr=0)
+            win = visual.Window([1024,800], color='blue', fullscr=0)
 
             # #show the images in order
-            # for f in range(0,len(positions)):
-            #     x = 2*((positions[f][0])/512) - 1
-            #     y = 2*((positions[f][1])/400) - 1
-            #     c = visual.Circle(win, radius = 0.01, pos=(x, -y), fillColor='red', lineColor=None) #eventually need to load in positions
-            #     pic = visual.ImageStim(win, image=imgs[f], colorSpace='rgb', size=2) #size=2 fills the window
-            #     pic.draw()
-            #     c.draw()
-            #     win.flip() #flips the window to show it
-            #     time.sleep(0.5) #show frames every 0.5 seconds
+            for f in range(0,len(positions)):
+                x = 2*((positions[f][0])/512) - 1
+                y = 2*((positions[f][1])/400) - 1
+                c = visual.Circle(win, radius = 0.01, pos=(x, -y), fillColor='red', lineColor=None) #eventually need to load in positions
+                pic = visual.ImageStim(win, image=imgs[f], colorSpace='rgb', size=2) #size=2 fills the window
+                pic.draw()
+                c.draw()
+                win.flip() #flips the window to show it
+                time.sleep(0.5) #show frames every 0.5 seconds
 
-            # input('exit')
+            input('exit')
 
-            showLabeledVid(imgs, positions)
+            # showLabeledVid(imgs, positions)
         else:
             #input rayna code for videos without tracker
             # make window and pixels
