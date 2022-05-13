@@ -29,7 +29,7 @@ framesforposlist = framesforposlist[0::nthframe] #TEMPORARY UNTIL GETPOSLIST IS 
 #INSTEAD: LOAD IN CSV JOHN IS MAKING?
 
 ImgPath = "ClassifierInput"
-frames = glob.glob(os.path.join(ImgPath, 'vid4*.jpg'))
+frames = glob.glob(os.path.join(ImgPath, '*.jpg'))
 frames.sort()
 frames = frames[0::nthframe] #TEMPORARY UNTIL GETPOSLIST IS FASTER
 
