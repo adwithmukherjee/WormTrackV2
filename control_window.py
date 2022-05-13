@@ -14,7 +14,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import cv2
 
-from HelpFxns import ImgArray, folderToImgArray, getPosList, folderToResizeImgArray, vidToImage
+from HelpFxns import ImgArray, folderToImgArray, getPosList, folderToResizeImgArray, vidToImage, showLabeledVid
 
 #title dialog box
 myDlg = gui.Dlg(title="WORMS WORMS WORMS")
@@ -31,7 +31,7 @@ myDlg.addField('Sensitivity:', 21)
 myDlg.addField('Show tracker:', initial=False)
 
 #choose to use neural net or difference tracker
-myDlg.addField('Tracker type:', choices=["Neural Net", "Difference Tracker"])
+myDlg.addField('Tracker type:', choices=["Basic Neural Net", "Scanned Neural Net" " Difference Tracker"])
 ok_data = myDlg.show()  # show dialog and wait for OK or Cancel
 
 if myDlg.OK:  # or if ok_data is not None
@@ -43,19 +43,21 @@ if myDlg.OK:  # or if ok_data is not None
     nn_or_dt = ok_data[3]
 
     #direct to turn filepath into frames
-    directory = vidToImage(filepath)
-    imgs = folderToImgArray('frames')
+    #directory = vidToImage(filepath)
+    imgs = folderToImgArray('frames/')
+    print(imgs.size)
 
     #direct to DT if selected
     if nn_or_dt == 'Difference Tracker':
-        positions = getPosList(imgs)
+        positions = getPosList(imgs, stepSize = 15)
+        print('yay')
 
         if show_tracker ==True:
             #input rayna code for overlaying video and poslist HERE
             # make window and pixels
             win = visual.Window([1024,800], color='blue', fullscr=0)
 
-            #show the images in order
+            # #show the images in order
             for f in range(0,len(positions)):
                 x = 2*((positions[f][0])/512) - 1
                 y = 2*((positions[f][1])/400) - 1
@@ -67,7 +69,8 @@ if myDlg.OK:  # or if ok_data is not None
                 time.sleep(0.5) #show frames every 0.5 seconds
 
             input('exit')
-        
+
+            # showLabeledVid(imgs, positions)
         else:
             #input rayna code for videos without tracker
             # make window and pixels

@@ -138,9 +138,10 @@ def getPosListNew(imgArray, stepSize=1, useNeuralNet = False):
         # plt.show()
         if isworm[0]==1:
             pos= prev
+            print('worm still there')
         else:
             print('lost worm at frame: ', i+1)
-    elif abs(pos[0]-prev[0])>subDim or abs(pos[1]-prev[1])>subDim and useNeuralNet:
+    elif (abs(pos[0]-prev[0])>subDim or abs(pos[1]-prev[1])>subDim) and useNeuralNet:
         print('abnormally fast movement detected at frame(', i+1,') checking with Neural Net')
         check= pullSub(img2,pos,subSize)
         check= cv2.resize(check, dsize=(224,224))
