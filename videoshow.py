@@ -35,7 +35,7 @@ frames = frames[0::nthframe] #TEMPORARY UNTIL GETPOSLIST IS FASTER
 
 print(f'Analyzing {len(frames)} frames')
 
-#positionlist = HelpFxns.getPosList(framesforposlist)
+positionlist = HelpFxns.getPosList(framesforposlist)
 
 # make window and pixels
 win = visual.Window([1024,800], color='blue', fullscr=0)
@@ -44,12 +44,12 @@ win.clearBuffer()
 
 #show the images in order
 for f in range(0,len(frames)):#positionlist)):
-    #x = 2*((positionlist[f][0])/512) - 1 #would want this to read the width of the image and divide by it
-    #y = 2*((positionlist[f][1])/400) - 1 #would want this to read the height of the image and divide by it
-    #c = visual.Circle(win, radius = 0.01, pos=(x, -y), fillColor='red', lineColor=None) #eventually need to load in positions
+    x = 2*((positionlist[f][0])/512) - 1 #would want this to read the width of the image and divide by it
+    y = 2*((positionlist[f][1])/400) - 1 #would want this to read the height of the image and divide by it
+    c = visual.Circle(win, radius = 0.01, pos=(x, -y), fillColor='red', lineColor=None) #eventually need to load in positions
     pic = visual.ImageStim(win, image=frames[f], colorSpace='rgb', size=2) #size=2 fills the window
     pic.draw()
-    #c.draw()
+    c.draw()
     win.flip() #flips the window to show it
     time.sleep(0.5) #show frames every 0.5 seconds
 
