@@ -46,14 +46,14 @@ if myDlg.OK:  # or if ok_data is not None
     nn_or_dt = ok_data[3]
 
     #direct to turn filepath into frames
-    #directory = vidToImage(filepath)
+    directory = vidToImage(filepath)
     imgs = folderToImgArray('frames/')
     print(imgs.size)
 
     #direct to DT if selected
     if nn_or_dt == 'Difference Tracker':
-        positions = getPosListNew(imgs, stepSize = 15)
-        print('yay')
+        positions = getPosListNew(imgs, stepSize = 5)
+        print(positions)
 
         if show_tracker ==True:
             #input rayna code for overlaying video and poslist HERE
@@ -69,12 +69,14 @@ if myDlg.OK:  # or if ok_data is not None
 
 
             #show the images in order
-            for f in range(0,len(frames)):#positionlist)):
+            for f in range(0,len(frames),5):#positionlist)):
                 x = 2*((positions[f][0])/512) - 1 #would want this to read the width of the image and divide by it
                 y = 2*((positions[f][1])/400) - 1 #would want this to read the height of the image and divide by it
+                print(x,y)
                 c = visual.Circle(win, radius = 0.01, pos=(x, -y), fillColor='red', lineColor=None) #eventually need to load in positions
                 pic = visual.ImageStim(win, image=frames[f], colorSpace='rgb', size=2) #size=2 fills the window
                 pic.draw()
+                c.draw()
                 win.flip() #flips the window to show it
                 time.sleep(0.5) #show frames every 0.5 seconds
 

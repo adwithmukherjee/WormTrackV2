@@ -5,7 +5,6 @@ import cv2
 from pydoc import doc
 import numpy as np
 import matplotlib.pyplot as plt
-import pickle
 
 from keras import preprocessing
 
@@ -35,7 +34,7 @@ def ImgArray(file_list, step=1):
   return np.array(outputArray)
 
 def vidToImage(video_file):
-  video = cv2.VideoCapture(video_file )
+  video = cv2.VideoCapture(video_file)
 
   try:
     if not os.path.exists('frames'):
@@ -44,7 +43,6 @@ def vidToImage(video_file):
     print ('Error: Creating directory of data')
   
   currentframe = 0
-  
   
   while(True):
       
@@ -57,6 +55,7 @@ def vidToImage(video_file):
         print ('Creating...' + name)
   
         # writing the extracted images
+        frame = cv2.resize(frame,(512,400))
         cv2.imwrite(name, frame)
   
         # increasing counter so that it will
@@ -115,7 +114,6 @@ def getPosList(imgArray, stepSize=1):
 
 
   for i in range(0,imgArray.shape[0]-1,stepSize):
-    #print(f'Analyzing frame {i}') #this is taking about 1 second per frame... would take over 10 mins to do the whole folder
     img1=imgArray[i,:,:,:]
     img2=imgArray[i+1,:,:,:]
 
@@ -270,17 +268,6 @@ def numToIndex(n,numDigits):
   out= out+ num
   return out
 
-def listToFile(listName, outFilename):
-    outfile= open(outFilename,'wb')
-    pickle.dump(listName,outfile)
-    outfile.close()
-
-def listFromFile(inFilename):
-    infile= open(inFilename,'rb')
-    out_object= pickle.load(infile)
-    infile.close()
-    return out_object
-
 def sort_rename(path):
   #Takes in a path to a file of numbered, sequential images
   #renames all the files in the directory with '_*' sequential number from 1:n added
@@ -340,17 +327,7 @@ def showLabeledVid(imgArray,posList,fps=30,overlay=True):
             plt.pause(1/fps)
             i+=1
 
-def showImgArray(imgArray, fps=30):
-  fg= plt.figure()
-  ax = fg.gca()
-  h = ax.imshow(imgArray[0])
 
-  i=0
-  for ii in range(1, imgArray.shape[0]):
-      h.set_data(imgArray[ii])
-      plt.draw()
-      plt.pause(1/fps)
-      i+=1
 
 #sort_rename('D:/WormTrack/WormData/Labeled/')
 # a=getImgList('D:/WormTrack/WormData/Labeled_Backup/')
