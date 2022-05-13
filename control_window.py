@@ -14,7 +14,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import cv2
 
-from HelpFxns import ImgArray, folderToImgArray, getPosList, folderToResizeImgArray, vidToImage
+from HelpFxns import ImgArray, folderToImgArray, getPosList, folderToResizeImgArray, vidToImage, showLabeledVid
 
 #title dialog box
 myDlg = gui.Dlg(title="WORMS WORMS WORMS")
@@ -43,31 +43,34 @@ if myDlg.OK:  # or if ok_data is not None
     nn_or_dt = ok_data[3]
 
     #direct to turn filepath into frames
-    directory = vidToImage(filepath)
-    imgs = folderToImgArray('frames')
+    #directory = vidToImage(filepath)
+    imgs = folderToImgArray('frames/')
+    print(imgs.size)
 
     #direct to DT if selected
     if nn_or_dt == 'Difference Tracker':
         positions = getPosList(imgs)
+        print('yay')
 
         if show_tracker ==True:
             #input rayna code for overlaying video and poslist HERE
             # make window and pixels
-            win = visual.Window([1024,800], color='blue', fullscr=0)
+            # win = visual.Window([1024,800], color='blue', fullscr=0)
 
-            #show the images in order
-            for f in range(0,len(positions)):
-                x = 2*((positions[f][0])/512) - 1
-                y = 2*((positions[f][1])/400) - 1
-                c = visual.Circle(win, radius = 0.01, pos=(x, -y), fillColor='red', lineColor=None) #eventually need to load in positions
-                pic = visual.ImageStim(win, image=imgs[f], colorSpace='rgb', size=2) #size=2 fills the window
-                pic.draw()
-                c.draw()
-                win.flip() #flips the window to show it
-                time.sleep(0.5) #show frames every 0.5 seconds
+            # #show the images in order
+            # for f in range(0,len(positions)):
+            #     x = 2*((positions[f][0])/512) - 1
+            #     y = 2*((positions[f][1])/400) - 1
+            #     c = visual.Circle(win, radius = 0.01, pos=(x, -y), fillColor='red', lineColor=None) #eventually need to load in positions
+            #     pic = visual.ImageStim(win, image=imgs[f], colorSpace='rgb', size=2) #size=2 fills the window
+            #     pic.draw()
+            #     c.draw()
+            #     win.flip() #flips the window to show it
+            #     time.sleep(0.5) #show frames every 0.5 seconds
 
-            input('exit')
-        
+            # input('exit')
+
+            showLabeledVid(imgs, positions)
         else:
             #input rayna code for videos without tracker
             # make window and pixels
