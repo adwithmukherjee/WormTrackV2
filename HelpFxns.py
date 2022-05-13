@@ -67,7 +67,40 @@ def vidToImage(video_file):
   video.release()
   cv2.destroyAllWindows()
 
- 
+def vidToImage2(video_file, outFolder='frames'):
+  video = cv2.VideoCapture(video_file )
+
+  try:
+    if not os.path.exists(outFolder):
+        os.makedirs(outFolder)
+  except OSError:
+    print ('Error: Creating directory of data')
+
+  currentframe = 0
+
+
+  while(True):
+      
+    # reading from frame
+    ret,frame = video.read()
+
+    if ret:
+        # if video is still left continue creating images
+        name = './'+ outFolder +'/frame' + str(numToIndex(currentframe, 5)) + '.jpg'
+        print ('Creating...' + name)
+
+        # writing the extracted images
+        frame= cv2.resize(frame,(512,400))
+        cv2.imwrite(name, frame)
+
+        # increasing counter so that it will
+        # show how many frames are created
+        currentframe += 1
+    else:
+        break
+    # Release all space and windows once done
+  video.release()
+  cv2.destroyAllWindows()
 
 
 def ImgArrayResize(path,step=1,resizeDims=(64,64,3)):
@@ -195,7 +228,7 @@ def frame_compare(img1,img2,showImg=False):
 
   difArray= np.zeros((sum.shape[0],sum.shape[1]))
   #print(difArray.shape)
-  totPixelDif=0;
+  totPixelDif=0
   numNonZpixels=0
   for pixelx in range(0,colLen):
     for pixely in range(0,rowLen):
