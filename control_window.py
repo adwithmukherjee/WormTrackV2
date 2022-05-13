@@ -69,12 +69,15 @@ if myDlg.OK:  # or if ok_data is not None
 
 
             #show the images in order
-            for f in range(0,len(frames),5):#positionlist)):
+            print(len(frames), len(positions))
+
+
+            for f in range(0,len(positions)):#positionlist)):
                 x = 2*((positions[f][0])/512) - 1 #would want this to read the width of the image and divide by it
                 y = 2*((positions[f][1])/400) - 1 #would want this to read the height of the image and divide by it
                 print(x,y)
                 c = visual.Circle(win, radius = 0.01, pos=(x, -y), fillColor='red', lineColor=None) #eventually need to load in positions
-                pic = visual.ImageStim(win, image=frames[f], colorSpace='rgb', size=2) #size=2 fills the window
+                pic = visual.ImageStim(win, image=frames[f*5], colorSpace='rgb', size=2) #size=2 fills the window
                 pic.draw()
                 c.draw()
                 win.flip() #flips the window to show it
@@ -84,30 +87,7 @@ if myDlg.OK:  # or if ok_data is not None
 
 
         else:
-            #input rayna code for videos without tracker
-            ImgPath = "frames/"
-            frames = glob.glob(os.path.join(ImgPath, '*.jpg'))
-            frames.sort()
-
-            print(f'Analyzing {len(frames)} frames')
-            # make window and pixels
-            win = visual.Window([1024,800], color='blue', fullscr=0)
-            win.clearBuffer()
-
-            #show the images in order
-            for f in range(0,len(positions)):
-                pic = visual.ImageStim(win, image=imgs[f], colorSpace='rgb', size=2) #size=2 fills the window
-                pic.draw()
-                win.flip() #flips the window to show it
-                time.sleep(0.5) #show frames every 0.5 seconds
-
-            input('exit')
-
-    else: 
-        #input what happens for neural net here, add later
-        positions = getPosListNew(imgs, stepSize = 15, useNeuralNet=True)
-
-        if show_tracker==True:
+            #input rayna code for overlaying video and poslist HERE
             ImgPath = "frames"
             frames = glob.glob(os.path.join(ImgPath, '*.jpg'))
             frames.sort()
@@ -120,35 +100,86 @@ if myDlg.OK:  # or if ok_data is not None
 
 
             #show the images in order
-            for f in range(0,len(frames)):#positionlist)):
+            print(len(frames), len(positions))
+
+
+            for f in range(0,len(positions)):#positionlist)):
                 x = 2*((positions[f][0])/512) - 1 #would want this to read the width of the image and divide by it
                 y = 2*((positions[f][1])/400) - 1 #would want this to read the height of the image and divide by it
+                print(x,y)
                 c = visual.Circle(win, radius = 0.01, pos=(x, -y), fillColor='red', lineColor=None) #eventually need to load in positions
-                pic = visual.ImageStim(win, image=frames[f], colorSpace='rgb', size=2) #size=2 fills the window
+                pic = visual.ImageStim(win, image=frames[f*5], colorSpace='rgb', size=2) #size=2 fills the window
                 pic.draw()
                 win.flip() #flips the window to show it
                 time.sleep(0.5) #show frames every 0.5 seconds
-                
+
             input('exit')
-        
-        else:
-            ImgPath = "frames/"
+
+
+    else: 
+        #input what happens for neural net here, add later
+        positions = getPosListNew(imgs, stepSize = 5, useNeuralNet=True)
+
+        if show_tracker==True:
+            #input rayna code for overlaying video and poslist HERE
+            ImgPath = "frames"
             frames = glob.glob(os.path.join(ImgPath, '*.jpg'))
             frames.sort()
 
             print(f'Analyzing {len(frames)} frames')
+
             # make window and pixels
             win = visual.Window([1024,800], color='blue', fullscr=0)
             win.clearBuffer()
 
+
             #show the images in order
-            for f in range(0,len(positions)):
-                pic = visual.ImageStim(win, image=imgs[f], colorSpace='rgb', size=2) #size=2 fills the window
+            print(len(frames), len(positions))
+
+
+            for f in range(0,len(positions)):#positionlist)):
+                x = 2*((positions[f][0])/512) - 1 #would want this to read the width of the image and divide by it
+                y = 2*((positions[f][1])/400) - 1 #would want this to read the height of the image and divide by it
+                print(x,y)
+                c = visual.Circle(win, radius = 0.01, pos=(x, -y), fillColor='red', lineColor=None) #eventually need to load in positions
+                pic = visual.ImageStim(win, image=frames[f*5], colorSpace='rgb', size=2) #size=2 fills the window
+                pic.draw()
+                c.draw()
+                win.flip() #flips the window to show it
+                time.sleep(0.5) #show frames every 0.5 seconds
+
+            input('exit')
+
+        
+        else:
+            #input rayna code for overlaying video and poslist HERE
+            ImgPath = "frames"
+            frames = glob.glob(os.path.join(ImgPath, '*.jpg'))
+            frames.sort()
+
+            print(f'Analyzing {len(frames)} frames')
+
+            # make window and pixels
+            win = visual.Window([1024,800], color='blue', fullscr=0)
+            win.clearBuffer()
+
+
+            #show the images in order
+            print(len(frames), len(positions))
+
+
+            for f in range(0,len(positions)):#positionlist)):
+                x = 2*((positions[f][0])/512) - 1 #would want this to read the width of the image and divide by it
+                y = 2*((positions[f][1])/400) - 1 #would want this to read the height of the image and divide by it
+                print(x,y)
+                c = visual.Circle(win, radius = 0.01, pos=(x, -y), fillColor='red', lineColor=None) #eventually need to load in positions
+                pic = visual.ImageStim(win, image=frames[f*5], colorSpace='rgb', size=2) #size=2 fills the window
                 pic.draw()
                 win.flip() #flips the window to show it
                 time.sleep(0.5) #show frames every 0.5 seconds
 
-            input('exit') 
+            input('exit')
+ 
 
         
     
