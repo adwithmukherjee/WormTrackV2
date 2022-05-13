@@ -6,40 +6,42 @@ import pickle
 from tracker import getPosListNew
 from netScanImg import ScanImgBatch, scanImage
 
-#Choose filepath to video or file of images e.g.('ClassifierInput/')
-#vidToImage('/PractiveVid/')
 
-imgLocation= 'Classifier2/'
+def trackerMain(imgLocation, methodNum, RefreshRate):
+    #Choose filepath to video or file of images e.g.('ClassifierInput/')
+    #vidToImage('/PractiveVid/')
 
-###Choose an input for which tracking method
-methodNum=3#2
-RefreshRate=1 #make this a user input
+    #imgLocation= 'Classifier2/'
 
-#Establish Array of Images to be tested
+    ###Choose an input for which tracking method
+    #methodNum=3#2
+    #RefreshRate=1 #make this a user input
 
-imgArray= folderToImgArray(imgLocation, step=RefreshRate) #can be made 10 to go faster
-#noNetOutput= getPosListNew(imgArray,useNeuralNet=False)
+    #Establish Array of Images to be tested
 
-
-### Get Position List 
-
-filename='PositionListMem'
+    imgArray= folderToImgArray(imgLocation, step=RefreshRate) #can be made 10 to go faster
+    #noNetOutput= getPosListNew(imgArray,useNeuralNet=False)
 
 
-if methodNum==1:
-    #Option 1: 
-    PosList= getPosList(imgArray)
-    listToFile(PosList,filename)
-elif methodNum==2:
-    PosList= getPosListNew(imgArray, useNeuralNet=False)
-    listToFile(PosList,filename)
-elif methodNum==3:
-    PosList= getPosListNew(imgArray, useNeuralNet=True)
-    listToFile(PosList,filename)
-elif methodNum==0:
-    ScanImgBatch(imgArray)
+    ### Get Position List 
 
-savedPosList= listFromFile(filename)
-print(savedPosList)
-print(len(savedPosList))
-showLabeledVid(imgArray,savedPosList,fps=30)
+    filename='PositionListMem'
+
+
+    if methodNum==1:
+        #Option 1: 
+        PosList= getPosList(imgArray)
+        listToFile(PosList,filename)
+    elif methodNum==2:
+        PosList= getPosListNew(imgArray, useNeuralNet=False)
+        listToFile(PosList,filename)
+    elif methodNum==3:
+        PosList= getPosListNew(imgArray, useNeuralNet=True)
+        listToFile(PosList,filename)
+    elif methodNum==0:
+        ScanImgBatch(imgArray)
+
+    savedPosList= listFromFile(filename)
+    print(savedPosList)
+    print(len(savedPosList))
+    showLabeledVid(imgArray,savedPosList,fps=30)
