@@ -1,6 +1,11 @@
 from HelpFxns import * 
 import tensorflow
 
+### A lot of this is adapted from the Bee-Neural Net class demo to simplify network architecture for us
+#John worked on using this to create our own model on self-created labeled data
+# ~5 hours
+
+
 #dataPath = '/content/drive/My Drive/WormTracker/LabeledImgs/'
 dataPath = 'D:/WormTrack/WormData/Labeled/'
 #imgsList= glob.glob(os.path.join(dataPath, '*.jpg')) #pulls list of all files in folder

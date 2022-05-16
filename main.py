@@ -6,7 +6,9 @@ import pickle
 from tracker import getPosListNew
 from netScanImg import ScanImgBatch, scanImage
 
-
+#John
+#a main function that can take in a directory of images, which tracking setting to use, and how many frames to skip between checks
+#returns tracking data and displays a tracked video
 def trackerMain(imgLocation, methodNum, RefreshRate):
     #Choose filepath to video or file of images e.g.('ClassifierInput/')
     #vidToImage('/PractiveVid/')
