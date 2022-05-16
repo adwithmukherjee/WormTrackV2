@@ -21,6 +21,14 @@ model : Model = load_model('TrainedModels/Model1')
 
 print(array.shape)
 
+#John ~18 hours
+#This was a bit of a side project that works but does not have a demo script written yet
+#It takes overlapping sub-images from a larger image and runs each through the neural net predictor
+#The centerpoint of the set of positive worm-identification sub-images is determined to be the worms location
+
+#input an image
+#returns x and y position of the worm
+
 def scanImage(image): 
 
     x_left, y_left, _ = image.shape

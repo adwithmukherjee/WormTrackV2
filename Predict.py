@@ -21,7 +21,9 @@ from keras import Model
 
 from keras.models import load_model
 
-
+#John ~8 hours
+#This is a set of functions that make neural net predictions on images passed to them
+#They can either label WORM or NO WORM
 
 
 # model : Model = load_model('D:/WormTrack/WormData/TrainedModels/Model1')

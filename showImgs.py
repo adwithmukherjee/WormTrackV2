@@ -9,7 +9,8 @@ print(imgs.shape)
 print(posList.shape)
 
 
-
+#This function shows the input video marked with a dot from the input corresponding position list
+#  a dot follows the worm around the screen
 def showLabeledVid(imgArray,posList,fps=30,overlay=True):
     fg= plt.figure()
     ax = fg.gca()

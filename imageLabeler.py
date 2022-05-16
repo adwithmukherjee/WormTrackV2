@@ -1,9 +1,12 @@
-#This block of code is so sick and took me ages- J
+#This block of code is so cool and took me ages- J
 #Use this block to auto-generate annotated images to use for training
 #Give an input path containing a series of sequential worm images
 #It will track the worm with motion sensing, guess where it is
 #Based on that guess, it will save an image containing the worm, labeled with a W
 #Then grab a random image from another portion of the original, that will not contain a worm, labeled N
+
+#WRitten by John  ~15 hours
+
 
 import cv2
 import random

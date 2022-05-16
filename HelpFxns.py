@@ -9,6 +9,10 @@ import pickle
 
 from keras import preprocessing
 
+#A COLLECTION OF FUNCTIONS THAT ARE CALLED FREQUENTLY IN THE TRACKER BACKEND
+#Written by John ~25 hours
+
+#This function takes in a labeled file of images and connects it to an array with ground-truth labels
 def dataset(file_list, size=(400,512), flattened=False): #,size=(300,180)
   data = []
   for i, file in enumerate(file_list):
@@ -24,6 +28,7 @@ def dataset(file_list, size=(400,512), flattened=False): #,size=(300,180)
 
   return np.array(data), np.array(labels)
  
+#takes in a file list and loads the images into an np array
 def ImgArray(file_list, step=1):
   outputArray=[]
   z = 0
@@ -34,6 +39,7 @@ def ImgArray(file_list, step=1):
     z=z+1
   return np.array(outputArray)
 
+#takes in a video and puts out each frame as a jpg
 def vidToImage(video_file):
   video = cv2.VideoCapture(video_file)
 
@@ -113,17 +119,20 @@ def ImgArrayResize(path,step=1,resizeDims=(64,64,3)):
     imgArray= np.asarray(imgList)
     return imgArray
 
+#gets a list of all images in a directory
 def getImgList(path):
   imlist = glob.glob(os.path.join(path, '*.jpg'))
   imlist.sort()
   return imlist 
 
+#returns a np image array from a directory of image files
 def folderToImgArray(ImgPath, step=1):
   imlist= glob.glob(os.path.join(ImgPath, '*.jpg'))
   imlist.sort()
   output= ImgArray(imlist, step)
   return output
 
+#folder for prepping image arrays for Neural Net training
 def folderToResizeImgArray(ImgPath,newDim):
   imlist= glob.glob(os.path.join(ImgPath, '*.jpg'))
   imlist.sort()
@@ -134,7 +143,7 @@ def folderToResizeImgArray(ImgPath,newDim):
   return outputArray
 
   
-
+#this loads and processes a single image to be passed to the Neural net for a prediction
 def loadNetworkImage(path):
   b= preprocessing.image.load_img(path, target_size=(64,64,3))
   return b
@@ -165,6 +174,8 @@ def getPosList(imgArray, stepSize=1):
 
 #poslist= getPosList(data,5)
 
+
+#Pulls a sub image from a larger image at the specified location
 def pullSub(inImg, pos, outputSize):
   if outputSize[0]>inImg.shape[0] or outputSize[1]>inImg.shape[1]:
     return "output bigger than image"
@@ -185,6 +196,8 @@ def pullSub(inImg, pos, outputSize):
 
   return subImg
 
+
+#This function is the core of the tracking system, compares 2 sequential frames for movement between them
 def frame_compare(img1,img2,showImg=False):
   #plt.imshow(img1)
   #plt.imshow(img2)
@@ -288,23 +301,28 @@ def frame_compare(img1,img2,showImg=False):
 
   return pos
 
+
+#gets list of images within a folder location
 def getImgList(ImgPath):
   imlist = glob.glob(os.path.join(ImgPath, '*.jpg'))
   imlist.sort()
   return imlist
 
+#saves a Python List to a pickle file with name outFilename
 def listToFile(listName, outFilename):
     outfile= open(outFilename,'wb')
     pickle.dump(listName,outfile)
     outfile.close()
 
+#retrieves python lists from pickle memory
 def listFromFile(inFilename):
     infile= open(inFilename,'rb')
     out_object= pickle.load(infile)
     infile.close()
     return out_object
 
-
+#Takes an integer counting number and appends the correct number of preceeding zeros
+#meant to prepare image filenames sequentially
 def numToIndex(n,numDigits):
   out=''
   num=str(n)
@@ -336,6 +354,8 @@ def sort_rename(path):
     os.rename(src, dst)
     i += 1
 
+
+#Renames all numbered files in a folder with a preceeding zeros tag
 def tempRename(path):
   ldseg = glob.glob(os.path.join(path, '*.jpg')) #pulls list of all files in folder
   print('Dataset contains {} images'.format(len(ldseg))) #returns how many images in list
@@ -350,6 +370,9 @@ def tempRename(path):
       os.rename(filename,dst)
     print(end)
     
+
+#Takes in an array of sequential images, and the associated tracked position list
+#Returns a window with the position markers overlayed on the image
 def showLabeledVid(imgArray,posList,fps=30,overlay=True):
     fg= plt.figure()
     ax = fg.gca()
