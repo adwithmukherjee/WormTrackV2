@@ -1,9 +1,9 @@
-import cv2
-import numpy as np
-import matplotlib.pyplot as plt
 
-def hello():
-    print('hello')
+
+from errno import ESTALE
+
+
+print('hello')
 
 
 # img = plt.imread('ClassifierInput/vid4_0002.jpg')
@@ -13,7 +13,12 @@ def hello():
 
 # plt.subplot(1,2,2)
 # plt.imshow(img2)
-
+print("anchal")
+answer = input("do u know anchal?")
+if answer == "yes":
+    print (" wphooooo")
+else:
+    print ("nooooooooooo")
 
 
 # plt.show()
